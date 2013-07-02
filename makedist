@@ -1,14 +1,20 @@
 #!/bin/sh
 
 lowercase(){
-    echo "$1" | sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/"
+    echo "$1" | sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ\//abcdefghijklmnopqrstuvwxyz-/"
 }
 
 OS=`lowercase \`uname -s\``
-#KERNEL=`uname -r`
 MACH=`uname -m`
 
-archive_file="domoticz_${OS}_${MACH}.tgz"
+#If the system is debian based, the debian version is included
+if [ -f /etc/debian_version ]
+then
+    DEBIAN=`lowercase \`cat /etc/debian_version\``
+    archive_file="domoticz_${OS}_${MACH}_debian-${DEBIAN}.tgz"
+else
+    archive_file="domoticz_${OS}_${MACH}.tgz"
+fi
 
 #Generate the archive
 echo "Generating Archive: ${archive_file}..."
