@@ -6,7 +6,7 @@ lowercase(){
 
 #Identify Debian Version
 identify_debian(){
-    DEB_VERSION="$1"
+    DEB_VERSION=`lowercase \`cat /etc/debian_version\``
 
     case "$DEB_VERSION" in
       *squeeze*) echo "squeeze" ;;
@@ -21,14 +21,22 @@ identify_debian(){
     esac
 }
 
+identify_architecture(){
+    ARCH=`uname -m`
+    case "$ARCH" in
+      i*86) echo "32bits" ;;
+      *64)  echo "64bits" ;;
+      *)    echo "other" ;;
+    esac
+}
+
 OS=`lowercase \`uname -s\``
-MACH=`uname -m`
+MACH=`identify_architecture`
 
 #If the system is debian based, the debian version is included
 if [ -f /etc/debian_version ]
 then
-    DEBIAN=`lowercase \`cat /etc/debian_version\``
-    VERSION=`identify_debian $DEBIAN`
+    VERSION=`identify_debian`
     archive_file="domoticz_${OS}_${MACH}_debian-${VERSION}.tgz"
 else
     archive_file="domoticz_${OS}_${MACH}.tgz"
