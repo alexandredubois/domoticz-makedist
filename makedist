@@ -22,12 +22,8 @@ identify_debian(){
 }
 
 identify_architecture(){
-    ARCH=`uname -m`
-    case "$ARCH" in
-      i*86) echo "32bits" ;;
-      *64)  echo "64bits" ;;
-      *)    echo "other" ;;
-    esac
+    ARCH=`getconf LONG_BIT`
+    echo "${ARCH}bits"
 }
 
 OS=`lowercase \`uname -s\``
