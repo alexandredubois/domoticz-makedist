@@ -21,21 +21,30 @@ identify_debian(){
     esac
 }
 
-identify_architecture(){
+identify_system_type(){
     ARCH=`getconf LONG_BIT`
     echo "${ARCH}bits"
 }
 
-OS=`lowercase \`uname -s\``
-MACH=`identify_architecture`
+identify_cpu_family(){
+    CPU=`lowercase \`uname -m\``
+    case "$CPU"  in
+      i*86)   echo "x86" ;;
+      x86_64) echo "x86_64" ;;
+      *)      echo "$CPU" ;;
+    esac
+}
+
+MACH=`identify_system_type`
+ARCH=`identify_cpu_family`
 
 #If the system is debian based, the debian version is included
 if [ -f /etc/debian_version ]
 then
     VERSION=`identify_debian`
-    archive_file="domoticz_${OS}_${MACH}_debian-${VERSION}.tgz"
+    archive_file="domoticz_${ARCH}_${MACH}_debian-${VERSION}.tgz"
 else
-    archive_file="domoticz_${OS}_${MACH}.tgz"
+    archive_file="domoticz_${ARCH}_${MACH}.tgz"
 fi
 
 #Generate the archive
