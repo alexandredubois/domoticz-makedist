@@ -1,7 +1,24 @@
-#!/bin/sh
+#!/bin/bash
 
 lowercase(){
     echo "$1" | sed "y/ABCDEFGHIJKLMNOPQRSTUVWXYZ\//abcdefghijklmnopqrstuvwxyz-/"
+}
+
+#Identify Debian Version
+identify_debian(){
+    DEB_VERSION="$1"
+
+    case "$DEB_VERSION" in
+      *squeeze*) echo "squeeze" ;;
+      *wheezy*)  echo "wheezy" ;;
+      *jessie*)  echo "jessie" ;;
+      5.0*) echo "lenny" ;;
+      6.0*) echo "squeeze" ;;
+      7.0*) echo "wheezy" ;;
+      7.1*) echo "wheezy" ;;
+      8.0*) echo "jessie" ;;
+      *)    echo "other" ;;
+    esac
 }
 
 OS=`lowercase \`uname -s\``
@@ -11,7 +28,8 @@ MACH=`uname -m`
 if [ -f /etc/debian_version ]
 then
     DEBIAN=`lowercase \`cat /etc/debian_version\``
-    archive_file="domoticz_${OS}_${MACH}_debian-${DEBIAN}.tgz"
+    VERSION=`identify_debian $DEBIAN`
+    archive_file="domoticz_${OS}_${MACH}_debian-${VERSION}.tgz"
 else
     archive_file="domoticz_${OS}_${MACH}.tgz"
 fi
@@ -24,7 +42,7 @@ then
   rm ${archive_file}
 fi
 
-tar -zcvf ${archive_file} domoticz History.txt License.txt updatedomo svnversion.h domoticz.sh www/ scripts/
+#tar -zcvf ${archive_file} domoticz History.txt License.txt updatedomo svnversion.h domoticz.sh www/ scripts/
 echo "Archive made (${archive_file})..."
 
 #################################
