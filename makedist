@@ -42,7 +42,7 @@ then
   rm ${archive_file}
 fi
 
-#tar -zcvf ${archive_file} domoticz History.txt License.txt updatedomo svnversion.h domoticz.sh www/ scripts/
+tar -zcvf ${archive_file} domoticz History.txt License.txt updatedomo svnversion.h domoticz.sh www/ scripts/
 echo "Archive made (${archive_file})..."
 
 #################################
